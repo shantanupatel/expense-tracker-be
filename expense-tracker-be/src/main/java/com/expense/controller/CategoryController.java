@@ -1,4 +1,4 @@
-package com.expense_tracker_be.controller;
+package com.expense.controller;
 
 import java.util.ArrayList;
 import java.util.List;

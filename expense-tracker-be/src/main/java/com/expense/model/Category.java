@@ -1,4 +1,4 @@
-package com.expense_tracker_be.model;
+package com.expense.model;
 
 import java.time.LocalDateTime;
 
