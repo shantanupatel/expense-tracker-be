@@ -1,21 +1,28 @@
 package com.expense.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.expense.model.Category;
+import com.expense.service.CategoryService;
+
 @RestController
+@RequestMapping(value = "/")
 public class CategoryController {
 
+	private final CategoryService categoryService;
+
+	public CategoryController(CategoryService categoryService) {
+		this.categoryService = categoryService;
+	}
+
 	@GetMapping(path = "categories")
-	public List<String> getCategories() {
-		ArrayList<String> categories = new ArrayList<>();
+	public List<Category> getCategories() throws Exception {
 
-		categories.add("Category 1");
-		categories.add("Category 2");
+		return categoryService.getCategories();
 
-		return categories;
 	}
 }
