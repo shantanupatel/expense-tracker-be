@@ -2,6 +2,10 @@ package com.expense.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +19,11 @@ public class Category {
 	private int id;
 	private String categoryName;
 	private String createdBy;
+
+	@CreationTimestamp(source = SourceType.DB)
 	private LocalDateTime createdDate;
+
+	@UpdateTimestamp(source = SourceType.DB)
 	private LocalDateTime updatedDate;
 
 	public Category() {
