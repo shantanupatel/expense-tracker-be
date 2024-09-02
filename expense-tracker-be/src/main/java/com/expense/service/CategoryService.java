@@ -21,4 +21,14 @@ public class CategoryService {
 
 		return this.categoryRepository.findAll();
 	}
+
+	public Category createCategory(Category category) {
+		System.out.println(category);
+
+		return this.categoryRepository.save(category);
+	}
+
+	public void deleteCategory(Integer categoryId) {
+		categoryRepository.deleteById(categoryId);
+	}
 }
