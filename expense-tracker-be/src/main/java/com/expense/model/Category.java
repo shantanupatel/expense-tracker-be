@@ -18,6 +18,9 @@ public class Category {
 	private LocalDateTime createdDate;
 	private LocalDateTime updatedDate;
 
+	public Category() {
+	}
+
 	public Category(String categoryName, String createdBy, LocalDateTime createdDate, LocalDateTime updatedDate) {
 		super();
 		this.categoryName = categoryName;
