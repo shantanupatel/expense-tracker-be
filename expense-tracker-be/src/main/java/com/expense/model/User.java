@@ -31,11 +31,14 @@ public class User {
 	@UpdateTimestamp(source = SourceType.DB)
 	private LocalDateTime updatedDate;
 
+	@UpdateTimestamp(source = SourceType.DB)
+	private LocalDateTime lastLoginDate;
+
 	public User() {
 	}
 
 	public User(String firstName, String lastName, String email, boolean isActivated, boolean isActive,
-			LocalDateTime createdDate, LocalDateTime updatedDate) {
+			LocalDateTime createdDate, LocalDateTime updatedDate, LocalDateTime lastLoginDate) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -44,6 +47,7 @@ public class User {
 		this.isActive = isActive;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
+		this.lastLoginDate = lastLoginDate;
 	}
 
 	public long getId() {
@@ -110,11 +114,19 @@ public class User {
 		this.updatedDate = updatedDate;
 	}
 
+	public LocalDateTime getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(LocalDateTime lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", isActivated=" + isActivated + ", isActive=" + isActive + ", createdDate=" + createdDate + ", updatedDate="
-				+ updatedDate + "]";
+				+ updatedDate + ", lastLoginDate=" + lastLoginDate + "]";
 	}
 
 }
