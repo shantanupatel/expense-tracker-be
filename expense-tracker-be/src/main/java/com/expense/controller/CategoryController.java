@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.expense.model.Category;
 import com.expense.service.CategoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
@@ -23,6 +25,7 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
+	@Operation(summary = "Get list of Categories", description = "Get list of all Categories. The response is a list of Categories object with id, category name, created by, created date and last updated date.")
 	@GetMapping()
 	public List<Category> getCategories() throws Exception {
 
@@ -30,6 +33,7 @@ public class CategoryController {
 
 	}
 
+	@Operation(summary = "Create a new Category", description = "Create a new Category. The response is an Category object with id, category name, created by, created date and last updated date.")
 	@PostMapping(consumes = { "application/json" })
 	public ResponseEntity<Category> createCategory(@RequestBody Category category) throws Exception {
 
