@@ -6,11 +6,15 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -19,19 +23,30 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+
+	@NotNull
+	@Size(min = 1, max = 20)
 	private String firstName;
+
+	@NotNull
+	@Size(min = 1, max = 20)
 	private String lastName;
+
+	@NotNull
 	private String email;
 	private boolean isActivated;
 	private boolean isActive;
 
 	@CreationTimestamp(source = SourceType.DB)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createdDate;
 
 	@UpdateTimestamp(source = SourceType.DB)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updatedDate;
 
 	@UpdateTimestamp(source = SourceType.DB)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime lastLoginDate;
 
 	public User() {
