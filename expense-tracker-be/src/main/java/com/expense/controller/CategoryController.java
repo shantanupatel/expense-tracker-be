@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,6 @@ public class CategoryController {
 	}
 
 	@GetMapping()
-	@CrossOrigin(origins = "http://localhost:3000")
 	public List<Category> getCategories() throws Exception {
 
 		return categoryService.getCategories();
@@ -33,7 +31,6 @@ public class CategoryController {
 	}
 
 	@PostMapping(consumes = { "application/json" })
-	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Category> createCategory(@RequestBody Category category) throws Exception {
 
 		System.out.println(category);
