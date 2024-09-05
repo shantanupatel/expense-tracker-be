@@ -1,6 +1,7 @@
 package com.expense.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,15 @@ public class CategoryService {
 	}
 
 	public Category createCategory(Category category) {
-		System.out.println(category);
-
 		return this.categoryRepository.save(category);
 	}
 
 	public void deleteCategory(Integer categoryId) {
 		categoryRepository.deleteById(categoryId);
 	}
+
+	public Optional<Category> findCategory(Integer categoryId) {
+		return categoryRepository.findById(categoryId);
+	}
+
 }
