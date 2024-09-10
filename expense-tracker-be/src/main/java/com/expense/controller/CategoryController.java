@@ -1,7 +1,7 @@
 package com.expense.controller;
 
+//import java.security.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.expense.handler.ResponseHandler;
 import com.expense.model.Category;
-import com.expense.service.CategoryService;
+import com.expense.response.GenericResponse;
+import com.expense.service.impl.CategoryServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -22,18 +22,26 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping("/categories")
 public class CategoryController {
 
-	private final CategoryService categoryService;
+	private final CategoryServiceImpl categoryService;
 
-	public CategoryController(CategoryService categoryService) {
+	public CategoryController(CategoryServiceImpl categoryService) {
 		this.categoryService = categoryService;
 	}
 
 	@Operation(summary = "Get list of Categories", description = "Get list of all Categories. The response is a list of Categories object with id, category name, created by, created date and last updated date.")
 	@GetMapping()
-	public List<Category> getCategories() throws Exception {
+//	public List<Category> getCategories() throws Exception {
+//
+//		return categoryService.getCategories();
+//
+//	}
 
-		return categoryService.getCategories();
+	public GenericResponse<List<Category>> getCategories() {
 
+		GenericResponse<List<Category>> response = new GenericResponse<List<Category>>(HttpStatus.OK.value(),
+				"List of Categories retrieved successfully", categoryService.getCategories());
+
+		return response;
 	}
 
 	@Operation(summary = "Create a new Category", description = "Create a new Category. The response is an Category object with id, category name, created by, created date and last updated date.")
@@ -53,16 +61,11 @@ public class CategoryController {
 
 	@Operation(summary = "Get Category by specified ID", description = "Get Category by specified ID. The response is an Category object with id, category name, created by, created date and last updated date.")
 	@GetMapping("/{categoryId}")
-	public ResponseEntity<Object> getCategory(@PathVariable Integer categoryId) {
+	public GenericResponse<Category> getCategory(@PathVariable Integer categoryId) {
+		GenericResponse<Category> response = new GenericResponse<Category>(HttpStatus.OK.value(), "",
+		categoryService.getCategory(categoryId));
 
-		Optional<Category> categoriesData = categoryService.findCategory(categoryId);
-
-		if (categoriesData.isPresent()) {
-			return ResponseHandler.generateResponse(null, HttpStatus.OK, categoriesData);
-		} else {
-			return ResponseHandler.generateResponse("No matching record found", HttpStatus.NOT_FOUND, categoriesData);
-		}
-
+		return response;
 	}
 
 }
