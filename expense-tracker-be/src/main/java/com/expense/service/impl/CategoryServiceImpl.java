@@ -1,10 +1,11 @@
 package com.expense.service.impl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.expense.exception.IdNotFoundException;
 import com.expense.model.Category;
 import com.expense.repository.CategoryRepository;
 import com.expense.service.CategoryService;
@@ -37,8 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category getCategory(Integer categoryId) {
-		return categoryRepository.findById(categoryId)
-				.orElseThrow(() -> new NoSuchElementException("No Category present with id: " + categoryId));
+		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
+
+		if (selectedCategory.isEmpty()) {
+			throw new IdNotFoundException("No category present with id: " + categoryId);
+		}
+
+		return selectedCategory.get();
 	}
 
 }
