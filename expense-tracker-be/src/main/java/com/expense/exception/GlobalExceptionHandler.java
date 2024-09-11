@@ -10,8 +10,15 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = IdNotFoundException.class)
 	public ResponseEntity<Object> handleIdNotFoundException(IdNotFoundException ex) {
-		ErrorResponse response = new ErrorResponse(ex.getMessage(), ex.getCause(), HttpStatus.NOT_FOUND.value());
+		ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND.value());
 
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(value = DuplicateEntryException.class)
+	public ResponseEntity<Object> handleDuplicateEntryException(DuplicateEntryException ex) {
+		ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.CONFLICT.value());
+
+		return new ResponseEntity<>(response, HttpStatus.CONFLICT);
 	}
 }

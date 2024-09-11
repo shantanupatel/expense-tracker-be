@@ -2,27 +2,20 @@ package com.expense.exception;
 
 public class ErrorResponse {
 
-	private final String message;
-	private final Throwable throwable;
-	private final Integer httpStatus;
+	private int HttpStatus;
+	private String message;
 
-	public ErrorResponse(String message, Throwable throwable, Integer httpStatus) {
+	public ErrorResponse(String message, int httpStatus) {
 		super();
+		HttpStatus = httpStatus;
 		this.message = message;
-		this.throwable = throwable;
-		this.httpStatus = httpStatus;
 	}
 
+	public int getHttpStatus() {
+		return HttpStatus;
+	}
 	public String getMessage() {
 		return message;
-	}
-
-	public Throwable getThrowable() {
-		return throwable;
-	}
-
-	public Integer getHttpStatus() {
-		return httpStatus;
 	}
 
 }
