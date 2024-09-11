@@ -30,14 +30,7 @@ public class CategoryController {
 
 	@Operation(summary = "Get list of Categories", description = "Get list of all Categories. The response is a list of Categories object with id, category name, created by, created date and last updated date.")
 	@GetMapping()
-//	public List<Category> getCategories() throws Exception {
-//
-//		return categoryService.getCategories();
-//
-//	}
-
 	public GenericResponse<List<Category>> getCategories() {
-
 		GenericResponse<List<Category>> response = new GenericResponse<List<Category>>(HttpStatus.OK.value(),
 				"List of Categories retrieved successfully", categoryService.getCategories());
 
@@ -62,7 +55,8 @@ public class CategoryController {
 	@Operation(summary = "Get Category by specified ID", description = "Get Category by specified ID. The response is an Category object with id, category name, created by, created date and last updated date.")
 	@GetMapping("/{categoryId}")
 	public GenericResponse<Category> getCategory(@PathVariable Integer categoryId) {
-		GenericResponse<Category> response = new GenericResponse<Category>(HttpStatus.OK.value(), "",
+		String message = "Retrieved Category with id " + categoryId;
+		GenericResponse<Category> response = new GenericResponse<Category>(HttpStatus.OK.value(), message,
 		categoryService.getCategory(categoryId));
 
 		return response;
