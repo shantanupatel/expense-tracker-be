@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.expense.exception.DuplicateEntryException;
 import com.expense.exception.IdNotFoundException;
 import com.expense.model.Category;
 import com.expense.repository.CategoryRepository;
@@ -28,7 +29,15 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category createCategory(Category category) {
-		return this.categoryRepository.save(category);
+		String categoryName = category.getCategoryName();
+
+		Optional<Category> foundCategory = categoryRepository.findByCategoryName(categoryName);
+
+		if (foundCategory.isPresent()) {
+			throw new DuplicateEntryException("Category with name " + categoryName + " already exists.");
+		}
+
+		return categoryRepository.save(category);
 	}
 
 	@Override
@@ -41,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
 
 		if (selectedCategory.isEmpty()) {
-			throw new IdNotFoundException("No category present with id: " + categoryId);
+			throw new IdNotFoundException("Category with id: " + categoryId + " does not exist.");
 		}
 
 		return selectedCategory.get();
