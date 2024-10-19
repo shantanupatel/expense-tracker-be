@@ -15,4 +15,6 @@ public interface CategoryService {
 	// public Optional<Category> findCategory(Integer categoryId);
 
 	Category getCategory(Integer categoryId);
+
+	public void updateCategory(Integer id, Category category);
 }

@@ -42,6 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void deleteCategory(Integer categoryId) {
+		Category category = categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new IdNotFoundException("Category with id " + categoryId + " not found."));
+
 		categoryRepository.deleteById(categoryId);
 	}
 
@@ -50,10 +53,27 @@ public class CategoryServiceImpl implements CategoryService {
 		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
 
 		if (selectedCategory.isEmpty()) {
-			throw new IdNotFoundException("Category with id: " + categoryId + " does not exist.");
+			throw new IdNotFoundException("Category with id " + categoryId + " does not exist.");
 		}
 
 		return selectedCategory.get();
+	}
+
+	@Override
+	public void updateCategory(Integer categoryId, Category category) {
+
+		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
+
+		if (selectedCategory.isEmpty()) {
+			throw new IdNotFoundException("Category with id " + categoryId + " does not exist.");
+		}
+
+		Category categoryDetails = selectedCategory.get();
+
+		categoryDetails.setCategoryName(category.getCategoryName());
+
+		categoryRepository.save(categoryDetails);
+
 	}
 
 }
