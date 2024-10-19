@@ -14,6 +14,7 @@ public class ErrorResponse {
 	public int getHttpStatus() {
 		return HttpStatus;
 	}
+
 	public String getMessage() {
 		return message;
 	}
