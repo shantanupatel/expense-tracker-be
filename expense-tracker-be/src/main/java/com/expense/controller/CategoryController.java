@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,17 +41,14 @@ public class CategoryController {
 
 	@Operation(summary = "Create a new Category", description = "Create a new Category. The response is an Category object with id, category name, created by, created date and last updated date.")
 	@PostMapping(consumes = { "application/json" })
-	public ResponseEntity<Category> createCategory(@RequestBody Category category) throws Exception {
+	public GenericResponse<String> createCategory(@RequestBody Category category) throws Exception {
 
-		Category newCategory = new Category();
+		categoryService.createCategory(category);
 
-		newCategory.setCategoryName(category.getCategoryName());
-		newCategory.setCreatedBy(category.getCreatedBy());
+		GenericResponse<String> response = new GenericResponse<String>(HttpStatus.OK.value(),
+				"New category " + category.getCategoryName() + " created successfully", null);
 
-		Category createdCategory = categoryService.createCategory(newCategory);
-
-		return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
-
+		return response;
 	}
 
 	@Operation(summary = "Get Category by specified ID", description = "Get Category by specified ID. The response is an Category object with id, category name, created by, created date and last updated date.")
@@ -62,4 +61,35 @@ public class CategoryController {
 		return response;
 	}
 
+	// @Operation(summary = "Create a new Category", description = "Create a new
+	// Category. The response is an Category object with id, category name, created
+	// by, created date and last updated date.")
+	// @PostMapping(consumes = { "application/json" }, value = "/categorysave")
+	// public ResponseEntity<String> createCategorySave(@RequestBody CategoryDto
+	// categoryDto) throws Exception {
+	//
+	// Category newCategoryEntity = new Category();
+	//
+	// newCategoryEntity.setCategoryName(categoryDto.getCategoryName());
+	// newCategoryEntity.setCreatedBy(categoryDto.getCreatedBy());
+	//
+	// Category createdCategory = categoryService.createCategory(newCategoryEntity);
+	//
+	// return new ResponseEntity<>("", HttpStatus.CREATED);
+	//
+	// }
+
+	@DeleteMapping("/{categoryId}")
+	public ResponseEntity<String> deleteCategory(@PathVariable int categoryId) {
+		categoryService.deleteCategory(categoryId);
+
+		return new ResponseEntity<>("Category with id " + categoryId + " deleted successfully", HttpStatus.OK);
+	}
+
+	@PutMapping("/{categoryId}")
+	public ResponseEntity<String> updateCategory(@PathVariable int categoryId, @RequestBody Category updatedCategory) {
+		categoryService.updateCategory(categoryId, updatedCategory);
+
+		return new ResponseEntity<>("Category with id " + categoryId + " updated successfully", HttpStatus.OK);
+	}
 }
