@@ -1,6 +1,7 @@
 package com.expense.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
@@ -12,6 +13,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category {
@@ -20,7 +23,9 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String categoryName;
-	private String createdBy;
+
+	@ManyToOne
+	private User createdBy;
 
 	@CreationTimestamp(source = SourceType.DB)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -30,15 +35,21 @@ public class Category {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updatedDate;
 
+	@OneToMany(mappedBy = "category")
+	public List<Expense> expenses;
+
 	public Category() {
 	}
 
-	public Category(String categoryName, String createdBy, LocalDateTime createdDate, LocalDateTime updatedDate) {
+	public Category(int id, String categoryName, User createdBy, LocalDateTime createdDate, LocalDateTime updatedDate,
+			List<Expense> expenses) {
 		super();
+		this.id = id;
 		this.categoryName = categoryName;
 		this.createdBy = createdBy;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
+		this.expenses = expenses;
 	}
 
 	public int getId() {
@@ -57,11 +68,11 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -85,6 +96,14 @@ public class Category {
 	public String toString() {
 		return "Category [id=" + id + ", categoryName=" + categoryName + ", createdBy=" + createdBy + ", createdDate="
 				+ createdDate + ", updatedDate=" + updatedDate + "]";
+	}
+
+	public List<Expense> getExpenses() {
+		return expenses;
+	}
+
+	public void setExpenses(List<Expense> expenses) {
+		this.expenses = expenses;
 	}
 
 }

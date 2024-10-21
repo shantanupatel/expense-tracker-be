@@ -4,7 +4,6 @@ package com.expense.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.expense.dto.CategoryDto;
 import com.expense.model.Category;
 import com.expense.response.GenericResponse;
 import com.expense.service.impl.CategoryServiceImpl;
@@ -32,9 +32,9 @@ public class CategoryController {
 
 	@Operation(summary = "Get list of Categories", description = "Get list of all Categories. The response is a list of Categories object with id, category name, created by, created date and last updated date.")
 	@GetMapping()
-	public GenericResponse<List<Category>> getCategories() {
-		GenericResponse<List<Category>> response = new GenericResponse<List<Category>>(HttpStatus.OK.value(),
-				"List of Categories retrieved successfully", categoryService.getCategories());
+	public GenericResponse<List<CategoryDto>> getCategories() {
+		GenericResponse<List<CategoryDto>> response = new GenericResponse<List<CategoryDto>>(HttpStatus.OK.value(),
+				"List of Categories retrieved successfully", categoryService.getAllCategories());
 
 		return response;
 	}
@@ -43,7 +43,7 @@ public class CategoryController {
 	@PostMapping(consumes = { "application/json" })
 	public GenericResponse<String> createCategory(@RequestBody Category category) throws Exception {
 
-		categoryService.createCategory(category);
+		categoryService.createNewCategory(category);
 
 		GenericResponse<String> response = new GenericResponse<String>(HttpStatus.OK.value(),
 				"New category " + category.getCategoryName() + " created successfully", null);
@@ -53,10 +53,10 @@ public class CategoryController {
 
 	@Operation(summary = "Get Category by specified ID", description = "Get Category by specified ID. The response is an Category object with id, category name, created by, created date and last updated date.")
 	@GetMapping("/{categoryId}")
-	public GenericResponse<Category> getCategory(@PathVariable Integer categoryId) {
+	public GenericResponse<CategoryDto> getCategory(@PathVariable Integer categoryId) {
 		String message = "Retrieved Category with id " + categoryId;
-		GenericResponse<Category> response = new GenericResponse<Category>(HttpStatus.OK.value(), message,
-		categoryService.getCategory(categoryId));
+		GenericResponse<CategoryDto> response = new GenericResponse<CategoryDto>(HttpStatus.OK.value(), message,
+				categoryService.getCategoryById(categoryId));
 
 		return response;
 	}
@@ -80,16 +80,19 @@ public class CategoryController {
 	// }
 
 	@DeleteMapping("/{categoryId}")
-	public ResponseEntity<String> deleteCategory(@PathVariable int categoryId) {
+	public GenericResponse<String> deleteCategory(@PathVariable int categoryId) {
 		categoryService.deleteCategory(categoryId);
 
-		return new ResponseEntity<>("Category with id " + categoryId + " deleted successfully", HttpStatus.OK);
+		return new GenericResponse<>(HttpStatus.OK.value(), "Category with id " + categoryId + " deleted successfully",
+				null);
 	}
 
 	@PutMapping("/{categoryId}")
-	public ResponseEntity<String> updateCategory(@PathVariable int categoryId, @RequestBody Category updatedCategory) {
-		categoryService.updateCategory(categoryId, updatedCategory);
+	public GenericResponse<String> updateCategory(@PathVariable int categoryId,
+			@RequestBody CategoryDto updatedCategory) {
+		categoryService.updateCategoryById(categoryId, updatedCategory);
 
-		return new ResponseEntity<>("Category with id " + categoryId + " updated successfully", HttpStatus.OK);
+		return new GenericResponse<>(HttpStatus.OK.value(), "Category with id " + categoryId + " updated successfully",
+				null);
 	}
 }
