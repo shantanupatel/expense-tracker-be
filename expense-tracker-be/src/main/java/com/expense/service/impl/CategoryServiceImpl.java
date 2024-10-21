@@ -2,9 +2,12 @@ package com.expense.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.expense.dto.CategoryDto;
+import com.expense.dto.CategoryMapper;
 import com.expense.exception.DuplicateEntryException;
 import com.expense.exception.IdNotFoundException;
 import com.expense.model.Category;
@@ -22,13 +25,15 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<Category> getCategories() {
+	public List<CategoryDto> getAllCategories() {
+		List<Category> categories = categoryRepository.findAll();
 
-		return this.categoryRepository.findAll();
+		return categories.stream().map(CategoryMapper::mapToCategoryDto).collect(Collectors.toList());
+
 	}
 
 	@Override
-	public Category createCategory(Category category) {
+	public Category createNewCategory(Category category) {
 		String categoryName = category.getCategoryName();
 
 		Optional<Category> foundCategory = categoryRepository.findByCategoryName(categoryName);
@@ -37,7 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new DuplicateEntryException("Category with name " + categoryName + " already exists.");
 		}
 
-		return categoryRepository.save(category);
+		Category savedCategory = categoryRepository.save(category);
+
+		return savedCategory;
 	}
 
 	@Override
@@ -49,18 +56,20 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Category getCategory(Integer categoryId) {
-		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
+	public CategoryDto getCategoryById(Integer categoryId) {
+		Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 
-		if (selectedCategory.isEmpty()) {
+		// condition to avoid NoSuchElementException
+		// https://www.javaguides.net/2023/08/javautilnosuchelementexception-no-value.html
+		if (optionalCategory.isEmpty()) {
 			throw new IdNotFoundException("Category with id " + categoryId + " does not exist.");
 		}
 
-		return selectedCategory.get();
+		return CategoryMapper.mapToCategoryDto(optionalCategory.get());
 	}
 
 	@Override
-	public void updateCategory(Integer categoryId, Category category) {
+	public void updateCategoryById(Integer categoryId, CategoryDto category) {
 
 		Optional<Category> selectedCategory = categoryRepository.findById(categoryId);
 

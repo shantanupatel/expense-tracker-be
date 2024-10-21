@@ -2,19 +2,23 @@ package com.expense.service;
 
 import java.util.List;
 
+import com.expense.dto.CategoryDto;
 import com.expense.model.Category;
 
 public interface CategoryService {
 
-	public List<Category> getCategories();
+	// get all categories
+	public List<CategoryDto> getAllCategories();
 
-	public Category createCategory(Category category);
+	// create a new category
+	public Category createNewCategory(Category category);
 
+	// delete an existing category
 	public void deleteCategory(Integer categoryId);
 
-	// public Optional<Category> findCategory(Integer categoryId);
+	// get an existing category by id
+	CategoryDto getCategoryById(Integer categoryId);
 
-	Category getCategory(Integer categoryId);
-
-	public void updateCategory(Integer id, Category category);
+	// update an existing category by id
+	public void updateCategoryById(Integer id, CategoryDto category);
 }
